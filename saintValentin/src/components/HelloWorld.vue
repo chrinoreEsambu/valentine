@@ -12,17 +12,21 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from "vue";
-
+import { inject } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 let taille = 1.2;
 
+// Récupérer la fonction startMusic du parent
+const startMusic = inject("startMusic") as () => void;
+
 const goto = () => {
+  startMusic?.(); // Démarrer la musique au clic
   router.push("/corinne");
 };
 const nonbtt = () => {
+  startMusic?.(); // Démarrer la musique au clic
   taille += 0.9;
   const btt = document.getElementById("ouibtt");
   if (btt) {

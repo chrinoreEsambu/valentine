@@ -1,23 +1,32 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide } from "vue";
 
 // Le router gère maintenant l'affichage des composants
 const audioRef = ref<HTMLAudioElement | null>(null);
+const musicStarted = ref(false);
+
+const startMusic = () => {
+  if (audioRef.value && !musicStarted.value) {
+    audioRef.value.play().catch(() => console.log("Musique en attente"));
+    musicStarted.value = true;
+  }
+};
+
+// Fournir la fonction startMusic à tous les composants enfants
+provide("startMusic", startMusic);
 
 onMounted(() => {
-  // Forcer le démarrage de la musique dès que possible
-  if (audioRef.value) {
-    audioRef.value.play().catch(() => {
-      // Si ça échoue, réessayer après un petit délai
-      setTimeout(() => {
-        if (audioRef.value) {
-          audioRef.value
-            .play()
-            .catch(() => console.log("Musique en attente d'interaction"));
-        }
-      }, 500);
-    });
-  }
+  // Écouter tous les clics sur l'application
+  const handleGlobalClick = () => {
+    startMusic();
+  };
+
+  // Ajouter l'écoute sur toute l'application
+  document.addEventListener("click", handleGlobalClick);
+  document.addEventListener("touchstart", handleGlobalClick);
+
+  // Essayer aussi automatiquement
+  setTimeout(startMusic, 1000);
 });
 </script>
 
