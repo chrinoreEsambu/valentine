@@ -12,12 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+// import { ref } from "vue";
 
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-let taille = 3;
+let taille = 1.2;
 
 const goto = () => {
   router.push("/corinne");

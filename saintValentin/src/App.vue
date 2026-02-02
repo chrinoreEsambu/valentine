@@ -3,6 +3,11 @@
 </script>
 
 <template>
+  <!-- Musique de fond globale -->
+  <audio autoplay loop>
+    <source src="/06 Alicia Keys - If I Ain t Got You.mp3" type="audio/mpeg" />
+  </audio>
+
   <router-view />
 </template>
 

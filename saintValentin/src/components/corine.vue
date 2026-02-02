@@ -30,26 +30,37 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import bou1 from "../assets/bou1.png";
 import bou2 from "../assets/bou2.png";
 import bou3 from "../assets/bou3.png";
 
-const currentImage = ref("/after1.gif");
-const fallingItems = ref([]);
+interface FallingItem {
+  id: number;
+  src: string;
+  style: {
+    left: string;
+    animationDuration: string;
+    width: string;
+    height: string;
+  };
+}
 
-const bouImages = [bou1, bou2, bou2, bou3]; // Plus de bou2 car c'est le plus beau
+const currentImage = ref("/after1.gif");
+const fallingItems = ref<FallingItem[]>([]);
+
+const bouImages = [bou1, bou2, bou2, bou2, bou2, bou3] as string[]; // Plus de bou2 car c'est le plus beau
 
 const isGif = computed(() => currentImage.value.endsWith(".gif"));
 
-const createFallingItem = () => {
+const createFallingItem = (): FallingItem => {
   const randomImage = bouImages[Math.floor(Math.random() * bouImages.length)];
   const leftPosition = Math.random() * 90; // Position entre 0 et 90%
   const animationDuration = 3 + Math.random() * 4; // Entre 3 et 7 secondes - vitesse parfaite
   const size = 30 + Math.random() * 40; // Taille entre 30 et 70px - plus grande !
 
   return {
-    id: null, // Sera ajouté dans addFallingItem
+    id: Date.now() + Math.random(), // ID unique généré ici
     src: randomImage,
     style: {
       left: `${leftPosition}%`,
@@ -62,7 +73,6 @@ const createFallingItem = () => {
 
 const addFallingItem = () => {
   const newItem = createFallingItem();
-  newItem.id = Date.now() + Math.random(); // ID unique
   fallingItems.value.push(newItem);
 
   // Supprimer l'item après l'animation (un peu plus de temps pour être sûr)
