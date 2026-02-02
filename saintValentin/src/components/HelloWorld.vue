@@ -5,7 +5,7 @@
       <img src="/before.gif" alt="" class="before" />
     </div>
     <div>
-      <button @click="goto">oui</button>
+      <button @click="goto" id="ouibtt">oui</button>
       <button @click="nonbtt" class="main">non</button>
     </div>
   </div>
@@ -17,13 +17,18 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+let taille = 3;
 
 const goto = () => {
   router.push("/corinne");
 };
 const nonbtt = () => {
-  
-}
+  taille += 0.9;
+  const btt = document.getElementById("ouibtt");
+  if (btt) {
+    btt.style.transform = `scale(${taille})`;
+  }
+};
 </script>
 
 <style>
