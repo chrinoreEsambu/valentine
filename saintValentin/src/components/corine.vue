@@ -54,7 +54,8 @@ const bouImages = [bou1, bou2, bou2, bou2, bou2, bou3] as string[]; // Plus de b
 const isGif = computed(() => currentImage.value.endsWith(".gif"));
 
 const createFallingItem = (): FallingItem => {
-  const randomImage = bouImages[Math.floor(Math.random() * bouImages.length)];
+  const randomImage =
+    bouImages[Math.floor(Math.random() * bouImages.length)] || bou1;
   const leftPosition = Math.random() * 90; // Position entre 0 et 90%
   const animationDuration = 3 + Math.random() * 4; // Entre 3 et 7 secondes - vitesse parfaite
   const size = 30 + Math.random() * 40; // Taille entre 30 et 70px - plus grande !
