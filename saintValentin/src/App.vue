@@ -3,43 +3,32 @@ import { ref, onMounted } from "vue";
 
 // Le router gère maintenant l'affichage des composants
 const audioRef = ref<HTMLAudioElement | null>(null);
-const musicStarted = ref(false);
-
-const startMusic = () => {
-  if (audioRef.value && !musicStarted.value) {
-    audioRef.value.play().catch((err) => console.log("Erreur audio:", err));
-    musicStarted.value = true;
-  }
-};
 
 onMounted(() => {
-  // Essayer de démarrer la musique automatiquement
-  setTimeout(startMusic, 1000);
-
-  // Ajouter des listeners pour les interactions utilisateur
-  const handleInteraction = () => {
-    startMusic();
-    document.removeEventListener("click", handleInteraction);
-    document.removeEventListener("touchstart", handleInteraction);
-    document.removeEventListener("keydown", handleInteraction);
-  };
-
-  document.addEventListener("click", handleInteraction);
-  document.addEventListener("touchstart", handleInteraction);
-  document.addEventListener("keydown", handleInteraction);
+  // Forcer le démarrage de la musique dès que possible
+  if (audioRef.value) {
+    audioRef.value.play().catch(() => {
+      // Si ça échoue, réessayer après un petit délai
+      setTimeout(() => {
+        if (audioRef.value) {
+          audioRef.value
+            .play()
+            .catch(() => console.log("Musique en attente d'interaction"));
+        }
+      }, 500);
+    });
+  }
 });
 </script>
 
 <template>
   <!-- Musique de fond globale -->
-  <audio ref="audioRef" loop preload="auto">
-    <source src="/06 Alicia Keys - If I Ain t Got You.mp3" type="audio/mpeg" />
+  <audio ref="audioRef" autoplay loop preload="auto">
+    <source
+      src="https://res.cloudinary.com/datfkvxvz/video/upload/v1770062613/06_Alicia_Keys_-_If_I_Ain_t_Got_You_qspbcq.mp3"
+      type="audio/mpeg"
+    />
   </audio>
-
-  <!-- Bouton pour démarrer la musique si nécessaire -->
-  <div v-if="!musicStarted" class="music-prompt" @click="startMusic">
-    🎵 Cliquez pour la musique 🎵
-  </div>
 
   <router-view />
 </template>
